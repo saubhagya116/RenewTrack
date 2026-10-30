@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>{{ 'Create account' if mode == 'signup' else 'Log in' }} · RenewTrack</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-body">
+<div class="auth-layout">
+  <section class="auth-showcase">
+    <a class="brand auth-brand" href="{{ url_for('login') }}"><span class="brand-icon"><svg viewBox="0 0 40 40"><path d="M29.5 13.5A12 12 0 1 0 32 22" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round"/><path d="M25 8.5h7v7" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 13v8l5 3" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg></span><span>renew<span class="brand-light">track</span></span></a>
+    <div class="showcase-content"><span class="showcase-pill"><i></i> SUBSCRIPTION CLARITY</span><h1>All your renewals.<br><em>One clear view.</em></h1><p>Stay ahead of recurring payments, keep your plans organised, and make every renewal a conscious choice.</p>
+      <div class="showcase-mini"><div class="mini-orbit">↻</div><div><b>A little more control, every month.</b><small>Track it. Understand it. Own it.</small></div></div>
+    </div>
+    <div class="showcase-foot">A simpler way to manage the things you subscribe to.</div>
+    <div class="decor decor-one"></div><div class="decor decor-two"></div>
+  </section>
+  <main class="auth-main">
+    <div class="auth-card">
+      <div class="auth-mobile-brand"><span class="brand-icon">↻</span> renew<span>track</span></div>
+      <div class="auth-kicker">{{ 'GET STARTED' if mode == 'signup' else 'WELCOME BACK' }}</div>
+      <h2>{{ 'Create your account' if mode == 'signup' else 'Sign in to RenewTrack' }}</h2>
+      <p class="auth-sub">{{ 'Set up your personal subscription space in less than a minute.' if mode == 'signup' else 'Your subscriptions and insights are waiting for you.' }}</p>
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}{% endif %}
+      {% endwith %}
+      <form method="post" class="auth-form">
+        {% if mode == 'signup' %}<label>Your name<input name="name" type="text" placeholder="e.g. Alex Morgan" autocomplete="name" required maxlength="70"></label>{% endif %}
+        <label>Email address<input name="email" type="email" placeholder="you@example.com" autocomplete="email" required></label>
+        <label>Password<div class="password-wrap"><input id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="{{ 'new-password' if mode == 'signup' else 'current-password' }}" required {% if mode == 'signup' %}minlength="8"{% endif %}><button type="button" class="show-password" onclick="togglePassword('password',this)">Show</button></div></label>
+        {% if mode == 'signup' %}<label>Confirm password<div class="password-wrap"><input id="confirm_password" name="confirm_password" type="password" placeholder="Enter your password again" autocomplete="new-password" required minlength="8"><button type="button" class="show-password" onclick="togglePassword('confirm_password',this)">Show</button></div></label>{% endif %}
+        <button class="btn primary auth-submit" type="submit">{{ 'Create my account' if mode == 'signup' else 'Log in' }} <span>→</span></button>
+      </form>
+      <div class="auth-switch">{{ "Already have an account?" if mode == 'signup' else "New to RenewTrack?" }} <a href="{{ url_for('login' if mode == 'signup' else 'signup') }}">{{ 'Log in' if mode == 'signup' else 'Create an account' }}</a></div>
+      <div class="auth-safe"><span>▣</span> Your account keeps your subscription list separate from other users.</div>
+    </div>
+    <div class="auth-copyright">© 2026 RenewTrack · Subscription clarity, without the clutter.</div>
+  </main>
+</div>
+<script>
+function togglePassword(id,button){const field=document.getElementById(id);const show=field.type==='password';field.type=show?'text':'password';button.textContent=show?'Hide':'Show';}
+</script>
+</body></html>

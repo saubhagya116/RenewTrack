@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% block title %}Overview · RenewTrack{% endblock %}{% block crumb %}Overview{% endblock %}
+{% block content %}
+<div class="page-heading"><div><div class="eyebrow">YOUR FINANCIAL SNAPSHOT</div><h1>Good to see you <span class="wave">✦</span></h1><p>Here's what's happening with your subscriptions.</p></div><a class="btn primary" href="{{ url_for('subscription_form') }}">＋ Add subscription</a></div>
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-top"><span>Total subscriptions</span><span class="stat-icon purple">◫</span></div><div class="stat-number">{{ active|length }}</div><div class="stat-foot">Currently active</div></div>
+  <div class="stat-card"><div class="stat-top"><span>Monthly spend</span><span class="stat-icon blue">₹</span></div><div class="stat-number">₹{{ "%.2f"|format(monthly) }}</div><div class="stat-foot">Estimated monthly equivalent</div></div>
+  <div class="stat-card"><div class="stat-top"><span>Yearly projection</span><span class="stat-icon green">↗</span></div><div class="stat-number">₹{{ "%.2f"|format(yearly) }}</div><div class="stat-foot">Based on active subscriptions</div></div>
+  <div class="stat-card"><div class="stat-top"><span>Renewing in 30 days</span><span class="stat-icon orange">◷</span></div><div class="stat-number">{{ upcoming|length }}</div><div class="stat-foot">Upcoming payments to watch</div></div>
+</div>
+<div class="content-grid">
+  <div class="panel renewals-panel"><div class="panel-head"><div><h2>Upcoming renewals</h2><p>Payments coming up in the next 30 days</p></div><a class="text-link" href="{{ url_for('subscriptions') }}">View all →</a></div>
+  {% if upcoming %}<div class="renewal-list">{% for u in upcoming %}
+    <div class="renewal-row"><div class="service-logo {{ loop.cycle('logo-purple','logo-green','logo-blue','logo-orange') }}">{{ u.item.name[:1]|upper }}</div><div class="renewal-info"><b>{{ u.item.name }}</b><small>{{ u.item.category }} · {{ u.item.cycle }}</small></div><div class="renewal-date"><b>{{ u.item.next_renewal }}</b><small>{% if u.days == 0 %}Due today{% elif u.days == 1 %}Tomorrow{% else %}In {{ u.days }} days{% endif %}</small></div><div class="renewal-price">₹{{ "%.2f"|format(u.item.amount) }}</div></div>
+  {% endfor %}</div>{% else %}<div class="empty-state"><div>✓</div><b>You're all caught up</b><p>No active renewals in the next 30 days.</p></div>{% endif %}</div>
+  <div class="panel breakdown-panel"><div class="panel-head"><div><h2>Spending breakdown</h2><p>Monthly equivalent by category</p></div><a class="text-link" href="{{ url_for('analytics') }}">Details →</a></div>
+  {% if category_totals %}<div class="breakdown-total"><strong>₹{{ "%.2f"|format(monthly) }}</strong><span>/ month</span></div>
+  {% for category, amount in category_totals %}<div class="bar-item"><div class="bar-label"><span>{{ category }}</span><b>₹{{ "%.2f"|format(amount) }}</b></div><div class="bar-track"><div class="bar-fill" style="width:{{ (amount/monthly*100) if monthly else 0 }}%"></div></div></div>{% endfor %}
+  {% else %}<div class="empty-state"><p>Add subscriptions to see your spending breakdown.</p></div>{% endif %}</div>
+</div>
+<div class="panel table-panel"><div class="panel-head"><div><h2>Your subscriptions</h2><p>A quick look at your active services</p></div><a class="text-link" href="{{ url_for('subscriptions') }}">Manage subscriptions →</a></div>
+{% if active %}<div class="table-scroll"><table><thead><tr><th>SERVICE</th><th>CATEGORY</th><th>PRICE</th><th>BILLING</th><th>NEXT RENEWAL</th><th>STATUS</th></tr></thead><tbody>{% for r in active[:5] %}<tr><td><div class="service-cell"><span class="service-logo mini">{{ r.name[:1]|upper }}</span><b>{{ r.name }}</b></div></td><td>{{ r.category }}</td><td class="amount">₹{{ "%.2f"|format(r.amount) }}</td><td>{{ r.cycle }}</td><td>{{ r.next_renewal }}</td><td><span class="status active">Active</span></td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><p>No subscriptions yet. Add your first one to get started.</p></div>{% endif %}</div>
+{% endblock %}

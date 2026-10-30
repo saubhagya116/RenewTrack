@@ -1,0 +1,15 @@
+RENEWTRACK QUICK START
+
+1. Extract the ZIP to a normal folder.
+2. Double-click START_RENEWTRACK.bat.
+3. Wait for Flask to start.
+4. Laptop: http://127.0.0.1:5000
+5. Create your account.
+
+PHONE:
+- Phone and laptop must use the same Wi-Fi.
+- Run ipconfig in Windows Command Prompt.
+- Open http://YOUR-LAPTOP-IP:5000 on your phone.
+- Keep the launcher window open.
+
+No VS Code required. First launch requires internet to install Flask.
